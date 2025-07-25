@@ -1,0 +1,11 @@
+name: "bun-test"
+services:
+  bun:
+    image: "oven/bun:1"
+    user: "bun"
+    working_dir: /home/bun
+    volumes:
+      - ./app:/home/bun/app
+    ports: 
+      - 3000:3000
+    command: "tail -F anything"
