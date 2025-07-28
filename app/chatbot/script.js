@@ -8,9 +8,7 @@ let userMessage = null; // Variable to store user's message
 const inputInitHeight = chatInput.scrollHeight;
 
 // API configuration
-// const API_KEY = "PASTE-YOUR-API-KEY"; // Your API key here
-// const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
-const API_URL = 'localhost:3000/api/model'; 
+const API_URL = 'http://localhost:3000/api/ask-gemini'; 
 
 const createChatLi = (message, className) => {
   // Create a chat <li> element with passed message and className
@@ -25,20 +23,12 @@ const createChatLi = (message, className) => {
 const generateResponse = async (chatElement) => {
   const messageElement = chatElement.querySelector("p");
 
-  // Define the properties and message for the API request
   const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      contents: [
-        {
-          role: "user",
-          parts: [{ text: userMessage }],
-        },
-      ],
-    }),
+    body: JSON.stringify({ 'userMessage': userMessage }),
   };
-
+ 
   // Send POST request to API, get response and set the reponse as paragraph text
   try {
     const response = await fetch(API_URL, requestOptions);
@@ -46,7 +36,7 @@ const generateResponse = async (chatElement) => {
     if (!response.ok) throw new Error(data.error.message);
 
     // Get the API response text and update the message element
-    messageElement.textContent = data.candidates[0].content.parts[0].text.replace(/\*\*(.*?)\*\*/g, "$1");
+    messageElement.textContent = data.message;
   } catch (error) {
     // Handle error
     messageElement.classList.add("error");
