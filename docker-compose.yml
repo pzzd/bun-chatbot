@@ -1,4 +1,4 @@
-name: "bun-test"
+name: "bun-chatbot-dev"
 services:
   bun:
     image: "oven/bun:1"
@@ -7,6 +7,7 @@ services:
     volumes:
       - ./app:/home/bun/app
       - ./.env.development:/home/bun/app/.env
+      - ./logs:/home/bun/app/logs
     environment:
       - NODE_ENV=development
     ports: 

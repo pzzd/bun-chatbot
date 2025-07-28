@@ -1,5 +1,9 @@
 import { serve } from "bun";
 import chatbot from "./chatbot/index.html";
+import BunLogger from "./logger.js";
+
+const logger = BunLogger;
+
 
 
 const server = serve({
@@ -18,50 +22,28 @@ const server = serve({
           message: "Hello, world!",
           method: "GET",
         });
-      },
-      async PUT(req) {
-        return Response.json({
-          message: "Hello, world!",
-          method: "PUT",
-        });
-      },
-    },
-
-    "/api/hello/:name": async req => {
-      const name = req.params.name;
-      return Response.json({
-        message: `Hello, ${name}!`,
-      });
-    },
-
-    "/api/dog": {
-      async GET(req) {
-        const headers = new Headers();
-        headers.append("Authorization", "Bearer YOUR_API_KEY");
-        console.log("Fetching random dog image...");
-
-        const response = await fetch( 'https://dog.ceo/api/breeds/image/random', {
-          method: "GET",
-          headers: headers,
-        });
-        const data = await response.json();
-//        log(data.message);
-
-        return Response.json({
-          method: "GET",
-          data: data,
-        });
       }
     },
 
     "/api/ask-gemini": {
       async POST(req) {
-        console.log("Fetching something from a model...");
-        const body = await req.json();
-        // TODO: log user message
+        console.log("Incoming call to /api/ask-gemini");
+        const returnFakeResponse = true; 
 
+        const body = await req.json();
+
+        if (returnFakeResponse) {
+          const modelReply = "This is a mock response from the model. Replace with actual API call.";
+          logger.log(`{ "userMessage": "${body.userMessage}", "modelReply": "${modelReply}" }`);
+
+          return Response.json({
+            message: modelReply,
+            error: null
+          });
+        }
+
+        
         const API_URL = Bun.env.API_URL+Bun.env.API_KEY;
-       console.log('API URL', API_URL);
 
         const requestOptions = {
           method: "POST",
@@ -77,22 +59,23 @@ const server = serve({
         };
 
         /* Below is the real API call to Gemini, but it gets overloaded */
-        // const response = await fetch(API_URL, requestOptions);
-        // const data = await response.json();
-        // // TODO: log response
+        const response = await fetch(API_URL, requestOptions);
+        const data = await response.json();
+        // TODO: log whole response?
 
-        // if (!response.ok) throw new Error(data.error.message);
-        // // TODO: log error
+        if (!response.ok) throw new Error(data.error.message);
+        // TODO: log error?
 
-        // // Get the API response text and update the message element
-        // const modelReply = data.candidates[0].content.parts[0].text.replace(/\*\*(.*?)\*\*/g, "$1");
+        // Get the API response text and update the message element
+        const modelReply = data.candidates[0].content.parts[0].text.replace(/\*\*(.*?)\*\*/g, "$1");
+        logger.log(`{ "userMessage": "${body.userMessage}", "modelReply": "${modelReply}" }`);
 
-        const modelReply = "This is a mock response from the model. Replace with actual API call.";
         return Response.json({
           message: modelReply,
           error: null
         });
       }
+      
     },
   },
 

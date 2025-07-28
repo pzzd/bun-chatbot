@@ -8,7 +8,7 @@ let userMessage = null; // Variable to store user's message
 const inputInitHeight = chatInput.scrollHeight;
 
 // API configuration
-const API_URL = 'http://localhost:3000/api/ask-gemini'; 
+const API_URL = '/api/ask-gemini'; 
 
 const createChatLi = (message, className) => {
   // Create a chat <li> element with passed message and className
