@@ -6,7 +6,7 @@ services:
     working_dir: /home/bun
     volumes:
       - ./app:/home/bun/app
-      - ./env.development:/home/bun/app/.env
+      # - ./env.development:/home/bun/app/.env
     environment:
       - NODE_ENV=development
     ports: 

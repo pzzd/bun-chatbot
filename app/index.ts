@@ -60,8 +60,8 @@ const server = serve({
         const body = await req.json();
         // TODO: log user message
 
-        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${Bun.env.API_KEY}`;
-        console.log('API URL', API_URL);
+        const API_URL = Bun.env.API_URL+Bun.env.API_KEY;
+//        console.log('API URL', API_URL);
 
         const requestOptions = {
           method: "POST",
