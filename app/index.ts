@@ -61,7 +61,7 @@ const server = serve({
         // TODO: log user message
 
         const API_URL = Bun.env.API_URL+Bun.env.API_KEY;
-//        console.log('API URL', API_URL);
+       console.log('API URL', API_URL);
 
         const requestOptions = {
           method: "POST",
