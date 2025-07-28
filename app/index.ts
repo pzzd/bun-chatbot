@@ -1,13 +1,6 @@
 import { serve } from "bun";
 import chatbot from "./chatbot/index.html";
 
-const CORS_HEADERS = {
-    headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'OPTIONS, POST',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-    },
-};
 
 const server = serve({
   port: 3000,
@@ -68,6 +61,7 @@ const server = serve({
         // TODO: log user message
 
         const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${Bun.env.API_KEY}`;
+        console.log('API URL', API_URL);
 
         const requestOptions = {
           method: "POST",
