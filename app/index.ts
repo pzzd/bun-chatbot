@@ -25,24 +25,25 @@ const server = serve({
       }
     },
 
-    "/api/ask-gemini": {
-      async POST(req) {
-        console.log("Incoming call to /api/ask-gemini");
-        const returnFakeResponse = true; 
-
-        const body = await req.json();
-
-        if (returnFakeResponse) {
-          const modelReply = "This is a mock response from the model. Replace with actual API call.";
-          logger.log(`{ "userMessage": "${body.userMessage}", "modelReply": "${modelReply}" }`);
+    "/api/ask-nobody": {
+        async POST(req) {
+          console.log("Incoming call to /api/ask-nobody");
+          const body = await req.json();
+          const modelReply = "This is a mock response.";
+          logger.log(`{ "userMessage": "${body.userMessage}", "model": "nobody", "modelReply": "${modelReply}" }`);
 
           return Response.json({
             message: modelReply,
             error: null
           });
         }
+    },
 
-        
+    "/api/ask-gemini": {
+      async POST(req) {
+        console.log("Incoming call to /api/ask-gemini");
+
+        const body = await req.json();
         const API_URL = Bun.env.API_URL+Bun.env.API_KEY;
 
         const requestOptions = {
@@ -63,12 +64,17 @@ const server = serve({
         const data = await response.json();
         // TODO: log whole response?
 
-        if (!response.ok) throw new Error(data.error.message);
+//      //  if (!response.ok) throw new Error(data.error.message);
         // TODO: log error?
 
         // Get the API response text and update the message element
-        const modelReply = data.candidates[0].content.parts[0].text.replace(/\*\*(.*?)\*\*/g, "$1");
-        logger.log(`{ "userMessage": "${body.userMessage}", "modelReply": "${modelReply}" }`);
+        var modelReply = "";
+        if (response.ok) {
+          modelReply = data.candidates[0].content.parts[0].text.replace(/\*\*(.*?)\*\*/g, "$1");
+        } else {
+          modelReply = `Error: ${data.error.message}`;
+        }
+        logger.log(`{ "userMessage": "${body.userMessage}", "model": "gemini", "modelReply": "${modelReply}" }`);
 
         return Response.json({
           message: modelReply,
