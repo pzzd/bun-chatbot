@@ -6,7 +6,14 @@
     - chatbot: Nepal Coding chatbot UI in plain javascript
     - index.ts: Bun server file
 - logs: Bun logs go here, external volume exposed inside Docker container
+
+
+You must add the following:
 - .env.development: dev environment vars; external file exposed inside Docker container
+```
+API_KEY=""
+API_URL="https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key="
+```
 
 ## Dev
 
