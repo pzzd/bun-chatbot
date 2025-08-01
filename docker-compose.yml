@@ -1,4 +1,4 @@
-name: "bun-chatbot-dev"
+name: "bun-nepal-gemini-dev"
 services:
   bun:
     image: "oven/bun:1"
